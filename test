@@ -1,0 +1,62 @@
+import unittest
+import os
+import shutil
+from bicycle_world import (
+    BASE_DIR, create_directory, create_file, list_directory,
+    move_file, delete_file, delete_directory, read_file, append_to_file
+)
+
+class TestBicycleWorld(unittest.TestCase):
+
+    def setUp(self):
+        """Set up a clean test environment before each test"""
+        self.test_dir = os.path.join(BASE_DIR, "test_area")
+        create_directory(self.test_dir)
+
+    def tearDown(self):
+        """Clean up after each test"""
+        if os.path.exists(self.test_dir):
+            shutil.rmtree(self.test_dir)
+
+    def test_create_directory(self):
+        sub_dir = os.path.join(self.test_dir, "new_folder")
+        create_directory(sub_dir)
+        self.assertTrue(os.path.exists(sub_dir))
+
+    def test_create_file(self):
+        file_path = os.path.join(self.test_dir, "test.txt")
+        create_file(file_path, "Hello Bicycle World!")
+        self.assertTrue(os.path.isfile(file_path))
+        with open(file_path, 'r') as f:
+            self.assertEqual(f.read(), "Hello Bicycle World!")
+
+    def test_append_to_file(self):
+        file_path = os.path.join(self.test_dir, "append.txt")
+        create_file(file_path, "Line 1")
+        append_to_file(file_path, "Line 2")
+        with open(file_path, 'r') as f:
+            lines = f.read().splitlines()
+            self.assertEqual(lines, ["Line 1", "Line 2"])
+
+    def test_move_file(self):
+        src = os.path.join(self.test_dir, "original.txt")
+        dst = os.path.join(self.test_dir, "renamed.txt")
+        create_file(src, "move me")
+        move_file(src, dst)
+        self.assertTrue(os.path.exists(dst))
+        self.assertFalse(os.path.exists(src))
+
+    def test_delete_file(self):
+        file_path = os.path.join(self.test_dir, "delete_me.txt")
+        create_file(file_path)
+        delete_file(file_path)
+        self.assertFalse(os.path.exists(file_path))
+
+    def test_delete_directory(self):
+        dir_path = os.path.join(self.test_dir, "subdir")
+        create_directory(dir_path)
+        delete_directory(dir_path)
+        self.assertFalse(os.path.exists(dir_path))
+
+if __name__ == "__main__":
+    unittest.main()
