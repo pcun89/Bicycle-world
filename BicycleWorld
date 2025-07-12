@@ -1,0 +1,62 @@
+import os
+import shutil
+
+# Base directory for simulation
+BASE_DIR = "bicycle_world"
+
+# Utility Functions
+def create_directory(path):
+    os.makedirs(path, exist_ok=True)
+
+def create_file(path, content=""):
+    with open(path, "w") as f:
+        f.write(content)
+
+def list_directory(path):
+    print(f"\nContents of {path}:")
+    for item in os.listdir(path):
+        print(" -", item)
+
+def move_file(src, dst):
+    shutil.move(src, dst)
+
+def delete_file(path):
+    os.remove(path)
+
+def delete_directory(path):
+    shutil.rmtree(path)
+
+def read_file(path):
+    with open(path, "r") as f:
+        print(f"\nContents of {path}:\n{f.read()}")
+
+def append_to_file(path, content):
+    with open(path, "a") as f:
+        f.write(content + "\n")
+
+# Setup simulated bicycle world
+def setup_bicycle_world():
+    # Create base structure
+    create_directory(BASE_DIR + "/inventory/accessories")
+    create_directory(BASE_DIR + "/sales/invoices")
+    create_directory(BASE_DIR + "/staff")
+
+    # Create files
+    create_file(BASE_DIR + "/inventory/bikes.txt", "Mountain Bike\nRoad Bike\nHybrid")
+    create_file(BASE_DIR + "/inventory/helmets.txt", "Helmet A\nHelmet B")
+    create_file(BASE_DIR + "/inventory/accessories/gloves.txt", "Winter Gloves")
+    create_file(BASE_DIR + "/staff/mechanics.txt", "Alice\nBob")
+    create_file(BASE_DIR + "/staff/sales_team.txt", "Charlie\nDana")
+
+    print("\n✅ Bicycle World setup complete.")
+
+# Demo simulation
+def run_simulation():
+    setup_bicycle_world()
+    
+    list_directory(BASE_DIR + "/inventory")
+    append_to_file(BASE_DIR + "/inventory/accessories/gloves.txt", "Summer Gloves")
+    read_file(BASE_DIR + "/inventory/accessories/gloves.txt")
+
+    # Move and rename a file
+    move_file(BASE_DIR + "/inventory/bikes.txt", BASE
